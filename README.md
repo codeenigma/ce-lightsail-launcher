@@ -32,7 +32,7 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 9. Copy it to your clipboard using the 'copy raw contents' button in the top right
 10. Close it so you go back to Lightsail and paste into the 'Add Launch Script' text box
 11. Make sure the correct SSH key is selected
-12. Choose an instance plan (you can use the $10 free for 3 months plan but it is a bit slow)
+12. Choose an instance plan (you can use the $10 free for 3 months plan but the installation will be a little slow)
 13. Click the 'Create instance' button
 
 Now you will need to be patient, especially if you selected the $10 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $20 instance plan or higher, but is no longer free tier.
