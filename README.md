@@ -22,22 +22,35 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 
 ### Steps
 1. Login to your AWS account
-2. Make sure you have an SSH key set up in AWS EC2
 2. [Open Lightsail](https://lightsail.aws.amazon.com/ls/webapp/home/instances)
 3. Click 'Create Instance'
 4. Select 'Linux/Unix'
 5. Select 'OS Only'
-6. (recommended) Select 'Debian 10.8'
+6. Select 'Debian 10.8' or 'Debian 11.4' (either should work)
 7. Click 'Add Launch Script'
-8. Open [launch.sh](https://github.com/codeenigma/ce-lightsail-launcher/blob/main/launcher.sh) in a new window
+8. Open [`launcher.sh`](https://github.com/codeenigma/ce-lightsail-launcher/blob/main/launcher.sh) in a new window
 9. Copy it to your clipboard using the 'copy raw contents' button in the top right
 10. Close it so you go back to Lightsail and paste into the 'Add Launch Script' text box
 11. Make sure the correct SSH key is selected
 12. Choose an instance plan (you can use the $10 free for 3 months plan but it is a bit slow)
 13. Click the 'Create instance' button
 
-Now you will need to be patient, especially if you selected the $10 plan, because the installer can be quite slow (over an hour for smaller plans, more like 10 minutes for larger plans). It's obviously quicker with a $20 instance plan or higher, but is no longer free tier.
+Now you will need to be patient, especially if you selected the $10 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $20 instance plan or higher, but is no longer free tier.
 
+#### Speeding things up
+If you don't care about the demo content, you can get your site up and running far more quickly by deleting this block from near the end of the `launcher.sh` script before you create your instance:
+
+```yaml
+    - name: Install Localgov Drupal demo content.
+      ansible.builtin.command:
+        cmd: "{{ drush_bin }} -y en localgov_demo"
+        chdir: "{{ deploy_path }}/{{ webroot }}/sites/{{ drupal.sites[0].folder }}"
+      ignore_errors: true
+```
+
+If you remove that block of code then the demo content will not be installed.
+
+### Launching LocalGov Drupal
 Once you have waited a while you can go to your Lightsail Instances page and click on your instance. Under 'Metrics' you should be able to see if your instance is running hot or not. If the metrics show CPU has settled down to a low number, you can be sure the installer is done. To launch LocalGov Drupal:
 
 1. Go to 'Networking'
