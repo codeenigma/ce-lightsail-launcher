@@ -32,7 +32,7 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 8. Open [launch.sh](https://github.com/codeenigma/ce-lightsail-launcher/blob/main/launcher.sh) in a new window
 9. Copy it to your clipboard using the 'copy raw contents' button in the top right
 10. Close it so you go back to Lightsail and paste into the 'Add Launch Script' text box
-11. Make sure the correct SSH key
+11. Make sure the correct SSH key is selected
 12. Choose an instance plan (you can use the $10 free for 3 months plan but it is a bit slow)
 13. Click the 'Create instance' button
 
@@ -58,3 +58,12 @@ It will give you a URL that looks something like this:
 * http://default/user/reset/1/1663176889/e2t6sE2VaougAwPwOl_h7N1OK-lyN8J9QtNU8ZDFoIc/login
 
 Replace `default` with your 'Public IP' and you will be logged in so you can set the password and create other users/manage the site.
+
+## Roadmap
+This is an initial release which fires up LGD on a single instance. Lightsail and the tools being used allow for more flexibility, so we would like to add some of the following features in the coming months:
+
+* Optionally make proper of Lightsail databases
+* Ensure Debian 11 and Ubuntu support
+* Allow for different Drupal distributions
+* Trigger the launcher from the Lightsail API
+* Provide a web UI for launching different distributions
