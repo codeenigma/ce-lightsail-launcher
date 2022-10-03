@@ -72,6 +72,13 @@ It will give you a URL that looks something like this:
 
 Replace `default` with your 'Public IP' and you will be logged in so you can set the password and create other users/manage the site.
 
+If you create other users and need to send them password reset links, the command would look like this for the username `greg`:
+
+```bash
+cd /home/ce-dev/deploy/live.local/web/sites/default/
+../../../vendor/drush/drush/drush uli --name greg
+```
+
 ## Roadmap
 This is an initial release which fires up LGD on a single instance. Lightsail and the tools being used allow for more flexibility, so we would like to add some of the following features in the coming months:
 
