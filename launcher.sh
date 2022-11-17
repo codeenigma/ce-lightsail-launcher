@@ -187,6 +187,12 @@ cat << END > /home/ce-dev/ce-provision/provision.yml
           max_file_uploads: 20
           date_timezone: "Europe/London"
           overrides: {}
+          opcache:
+            enable: 1
+            enable_cli: 0
+            memory_consumption: 128
+            max_accelerated_files: 2000
+            validate_timestamps: 1
         fpm:
           expose_php: "On"
           error_reporting: "E_ALL"
@@ -216,6 +222,12 @@ cat << END > /home/ce-dev/ce-provision/provision.yml
           max_spare_servers: 3
           process_idle_timeout: 10s
           max_requests: 500
+          opcache:
+            enable: 1
+            enable_cli: 0
+            memory_consumption: 128
+            max_accelerated_files: 2000
+            validate_timestamps: 1
     - php_composer:
         version: ''
         version_branch: '--2'
