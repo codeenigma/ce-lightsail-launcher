@@ -136,6 +136,7 @@ cat << END > /home/ce-dev/ce-provision/provision.yml
           server_names_hash_bucket_size: 256
           access_log: /var/log/nginx-access.log
           error_log: /var/log/nginx-error.log
+          ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
         log_group_prefix: ""
         php_fastcgi_backend: "127.0.0.1:90{{ php.version[-1] | replace('.','') }}"
         ratelimitingcrawlers: false
