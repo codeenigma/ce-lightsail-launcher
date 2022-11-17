@@ -378,7 +378,7 @@ cat << END > /home/ce-dev/deploy/live.local/deploy.yml
   post_tasks:
     - name: Install Localgov Drupal demo content field dependencies.
       ansible.builtin.command:
-        cmd: "{{ drush_bin }} -y en default_content condition_field tablefield geofield_map geocoder_fielgeocoder_geofield geocoder_field field_formatter_class dynamic_entity_reference datetime_range date_recur_modular
+        cmd: "{{ drush_bin }} -y en default_content condition_field tablefield geofield_map geocoder_field field_formatter_class dynamic_entity_reference datetime_range date_recur_modular
 search_api_db search_api_autocomplete entity_reference_facet_link"
         chdir: "{{ deploy_path }}/{{ webroot }}/sites/{{ drupal.sites[0].folder }}"
       ignore_errors: true
