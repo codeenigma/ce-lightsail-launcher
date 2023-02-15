@@ -37,19 +37,6 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 
 Now you will need to be patient, especially if you selected the $10 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $20 instance plan or higher, but is no longer free tier.
 
-#### Speeding things up
-If you don't care about the demo content, you can get your site up and running far more quickly by deleting this block from near the end of the `launcher.sh` script before you create your instance:
-
-```yaml
-    - name: Install Localgov Drupal demo content.
-      ansible.builtin.command:
-        cmd: "{{ drush_bin }} -y en localgov_demo"
-        chdir: "{{ deploy_path }}/{{ webroot }}/sites/{{ drupal.sites[0].folder }}"
-      ignore_errors: true
-```
-
-If you remove that block of code then the demo content will not be installed.
-
 ### Launching LocalGov Drupal
 Once you have waited a while you can go to your Lightsail Instances page and click on your instance. Under 'Metrics' you should be able to see if your instance is running hot or not. If the metrics show CPU has settled down to a low number, you can be sure the installer is done. To launch LocalGov Drupal:
 
