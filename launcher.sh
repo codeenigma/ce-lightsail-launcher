@@ -58,15 +58,16 @@ su - ce-dev -c "git clone --branch 1.x https://github.com/codeenigma/ce-provisio
 
 ANSIBLE_DEFAULT_EXTRA_VARS="{_ce_provision_base_dir: $OWN_DIR, _ce_provision_build_dir: $BUILD_WORKSPACE, _ce_provision_build_tmp_dir: $BUILD_TMP_DIR, _ce_provision_data_dir: $ANSIBLE_DATA_DIR, _ce_provision_build_id: $BUILD_ID, _ce_provision_force_play: $FORCE_PLAY, target_branch: $TARGET_PROVISION_BRANCH}"
 DOMAIN_NAME="www.example.com"
+PROJECT_TYPE="lgd"
 
 # Install controller packages
-wget -O /home/ce-dev/ce-provision/setup.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/setup.yml
+wget -O /home/ce-dev/ce-provision/setup.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/_common/setup.yml
 set -x && \
 cd /home/ce-dev/ce-provision && \
 su - ce-dev -c "/usr/local/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/setup.yml"
 
 # Install web server packages
-wget -O /home/ce-dev/ce-provision/provision.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/provision.yml
+wget -O /home/ce-dev/ce-provision/provision.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/_common/provision.yml
 set -x && \
 cd /home/ce-dev/ce-provision && \
 su - ce-dev -c "/usr/local/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/provision.yml"
@@ -77,7 +78,7 @@ mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password; AL
 
 # Deploy Drupal
 su - ce-dev -c "mkdir -p /home/ce-dev/deploy/live.local"
-wget -O /home/ce-dev/ce-provision/deploy.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/deploy.yml
+wget -O /home/ce-dev/ce-provision/deploy.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/$PROJECT_TYPE/deploy.yml
 set -x && \
 cd /home/ce-dev/deploy/live.local && \
 su - ce-dev -c "/bin/sh /home/ce-dev/ce-deploy/scripts/build.sh --workspace /home/ce-dev/deploy/live.local --playbook deploy.yml --build-number 0 --build-id celocalgovtemplate-dev --ansible-extra-vars \"{_domain_name: $DOMAIN_NAME}\""
