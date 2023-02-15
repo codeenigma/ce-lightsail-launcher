@@ -1,0 +1,159 @@
+---
+- hosts: localhost
+  become: true
+  vars:
+    - _env_type: dev
+    - db_root_pass: ce-dev
+    - project_name: lgd
+    - user_root:
+        authorized_keys: []
+        delete_admin: false
+    - mysql_client:
+        client: "mariadb-client"
+        host: localhost
+        user: root
+        password: ce-dev
+        creds_file_dest: /home/ce-dev/.mysql.creds
+        creds_file_owner: ce-dev
+        creds_file_group: ce-dev
+    - nginx:
+        user: www-data
+        worker_processes: auto
+        events:
+          worker_connections: 768
+        http:
+          server_names_hash_bucket_size: 256
+          access_log: /var/log/nginx-access.log
+          error_log: /var/log/nginx-error.log
+          ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
+        log_group_prefix: ""
+        php_fastcgi_backend: "127.0.0.1:90{{ php.version[-1] | replace('.','') }}"
+        ratelimitingcrawlers: false
+        client_max_body_size: "700M"
+        fastcgi_read_timeout: 60
+        overrides: []
+        domains:
+          - server_name: "_"
+            access_log:  "/var/log/nginx-access.log"
+            error_log:  "/var/log/nginx-error.log"
+            error_log_level:  "notice"
+            webroot:  "/home/ce-dev/deploy/live.local/web"
+            project_type:  "drupal8"
+            ratelimitingcrawlers: false
+            is_default: true
+            ssl: # @see the 'ssl' role.
+              domains:
+                - "{{ _domain_name }}"
+              handling: selfsigned
+            servers:
+              - port: 80
+                ssl: false
+                https_redirect: false
+              - port: 443
+                ssl: true
+                https_redirect: false
+            upstreams: []
+    - php:
+        version:
+          - 8.0
+        cli:
+          expose_php: "On"
+          error_reporting: "E_ALL"
+          display_errors: "On"
+          display_startup_errors: "On"
+          html_errors: "On"
+          engine: "On"
+          short_open_tag: "Off"
+          max_execution_time: 120
+          max_input_time: 60
+          max_input_nesting_level: 64
+          max_input_vars: 1000
+          memory_limit: -1
+          log_errors_max_len: 1024
+          ignore_repeated_errors: "Off"
+          ignore_repeated_source: "Off"
+          post_max_size: 200M
+          upload_max_filesize: 200M
+          max_file_uploads: 20
+          date_timezone: "Europe/London"
+          overrides: {}
+          opcache:
+            enable: 1
+            enable_cli: 0
+            memory_consumption: 128
+            max_accelerated_files: 2000
+            validate_timestamps: 1
+        fpm:
+          expose_php: "On"
+          error_reporting: "E_ALL"
+          display_errors: "On"
+          display_startup_errors: "On"
+          html_errors: "On"
+          engine: "On"
+          short_open_tag: "Off"
+          max_execution_time: 120
+          max_input_time: 60
+          max_input_nesting_level: 64
+          max_input_vars: 1000
+          memory_limit: 256M
+          log_errors_max_len: 1024
+          ignore_repeated_errors: "Off"
+          ignore_repeated_source: "Off"
+          post_max_size: 200M
+          upload_max_filesize: 200M
+          max_file_uploads: 20
+          date_timezone: "Europe/London"
+          pool_user: ce-dev
+          pool_group: ce-dev
+          default_socket_timeout: 60
+          max_children: 5
+          start_servers: 2
+          min_spare_servers: 1
+          max_spare_servers: 3
+          process_idle_timeout: 10s
+          max_requests: 500
+          opcache:
+            enable: 1
+            enable_cli: 0
+            memory_consumption: 128
+            max_accelerated_files: 2000
+            validate_timestamps: 1
+    - php_composer:
+        version: ''
+        version_branch: '--2'
+        keep_updated: true
+        github_oauth_token: ''
+  tasks:
+    - name: Update the apt cache.
+      ansible.builtin.apt:
+        update_cache: true
+    - name: Install common packages.
+      ansible.builtin.import_role:
+        name: _meta/common_base
+    - name: Configure MariaDB installation script.
+      ansible.builtin.debconf:
+        name: mariadb-server
+        question: "{{ item }}"
+        vtype: password
+        value: "{{ db_root_pass }}"
+      with_items:
+        - mysql-server/root_password
+        - mysql-server/root_password_again
+    - name: Install MariaDB with custom configuration.
+      ansible.builtin.apt:
+        name: mariadb-server
+        state: latest
+        update_cache: true
+      register: install_mariadb
+    - name: Install the MySQL client.
+      ansible.builtin.import_role:
+        name: mysql_client
+    - name: Set up the PHP CLI.
+      ansible.builtin.import_role:
+        name: php-cli
+    - name: Set up PHP-FPM.
+      ansible.builtin.import_role:
+        name: php-fpm
+    - name: Set up Nginx web server.
+      ansible.builtin.import_role:
+        name: nginx
