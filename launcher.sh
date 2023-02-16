@@ -78,7 +78,7 @@ mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password; AL
 
 # Deploy Drupal
 su - ce-dev -c "mkdir -p /home/ce-dev/deploy/live.local"
-wget -O /home/ce-dev/ce-provision/deploy.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/$PROJECT_TYPE/deploy.yml
+wget -O /home/ce-dev/deploy/live.local/deploy.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/$PROJECT_TYPE/deploy.yml
 set -x && \
 cd /home/ce-dev/deploy/live.local && \
 su - ce-dev -c "/bin/sh /home/ce-dev/ce-deploy/scripts/build.sh --workspace /home/ce-dev/deploy/live.local --playbook deploy.yml --build-number 0 --build-id celocalgovtemplate-dev --ansible-extra-vars \"{_domain_name: $DOMAIN_NAME}\""
