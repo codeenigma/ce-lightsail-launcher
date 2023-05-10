@@ -18,6 +18,8 @@
         ce_provision_dir: /home/ce-dev/ce-provision
         groups: []
         galaxy_custom_requirements_file: ""
+        upgrade_galaxy:
+          enabled: false
     - ce_provision:
         new_user: true
         key_name: id_rsa.pub
