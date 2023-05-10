@@ -35,6 +35,11 @@
         galaxy_roles_directory: "/home/ce-dev/.ansible/roles"
         upgrade_galaxy:
           enabled: false
+    - ce_ansible:
+        upgrade:
+          enabled: false
+        linters:
+          enabled: false
   roles:
     - ce_provision
     - ce_deploy
