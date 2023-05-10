@@ -33,6 +33,8 @@
         groups: []
         galaxy_custom_requirements_file: ""
         galaxy_roles_directory: "/home/ce-dev/.ansible/roles"
+        upgrade_galaxy:
+          enabled: false
   roles:
     - ce_provision
     - ce_deploy
