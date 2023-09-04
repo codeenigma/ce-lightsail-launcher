@@ -32,6 +32,7 @@
         client_max_body_size: "700M"
         fastcgi_read_timeout: 60
         overrides: []
+        recreate_vhosts: true
         domains:
           - server_name: "_"
             access_log:  "/var/log/nginx-access.log"
