@@ -57,6 +57,8 @@
     - php:
         version:
           - 8.1
+        apt_signed_by: https://packages.sury.org/php/apt.gpg
+        apt_origin: "origin=deb.sury.org,codename=${distro_codename}"
         cli:
           expose_php: "On"
           error_reporting: "E_ALL"
