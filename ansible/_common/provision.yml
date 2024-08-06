@@ -112,6 +112,9 @@
           cookie_lifetime: 0
           zend_assertions: -1
           session_cookie_secure: "Off"
+          unix_socket: false
+          server_ip: "127.0.0.1"
+          tcp_port: ""
           pool_user: ce-dev
           pool_group: ce-dev
           default_socket_timeout: 60
