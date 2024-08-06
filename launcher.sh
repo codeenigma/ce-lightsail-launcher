@@ -21,7 +21,8 @@ apt-get install -y -o Dpkg::Options::="--force-confnew" \
   python3-apt \
   python3-dev \
   python3-pycurl \
-  python3-pip \
+  python3-venv \
+  python3-debian \
   rsyslog \
   sudo \
   systemd \
