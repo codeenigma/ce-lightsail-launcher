@@ -34,7 +34,6 @@
         apcu_autoloader: false
     - drush:
         use_vendor: true
-    - drush_bin: ../../../vendor/drush/drush/drush
     - lgd_modules:
         - localgov_alert_banner
         - localgov_directories
@@ -60,7 +59,7 @@
   pre_tasks:
     - name: Download composer file.
       ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/drupal/recommended-project/9.3.x/composer.json
+        url: https://raw.githubusercontent.com/drupal/recommended-project/10.3.1/composer.json
         dest: "{{ deploy_path }}/composer.json"
         force: false
     - name: Enable composer-patches plugin.

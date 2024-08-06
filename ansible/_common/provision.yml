@@ -56,7 +56,7 @@
             upstreams: []
     - php:
         version:
-          - 8.0
+          - 8.1
         cli:
           expose_php: "On"
           error_reporting: "E_ALL"
@@ -148,13 +148,13 @@
       register: install_mariadb
     - name: Install the MySQL client.
       ansible.builtin.import_role:
-        name: mysql_client
+        name: debian/mysql_client
     - name: Set up the PHP CLI.
       ansible.builtin.import_role:
-        name: php-cli
+        name: debian/php-cli
     - name: Set up PHP-FPM.
       ansible.builtin.import_role:
-        name: php-fpm
-    - name: Set up Nginx web server.
+        name: debian/php-fpm
+    - name: Set up NGINX web server.
       ansible.builtin.import_role:
-        name: nginx
+        name: debian/nginx
