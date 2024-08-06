@@ -16,7 +16,7 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 
 ### Prerequisites
 * It's going to be helpful to know a little bit about Linux terminal and bash
-* For now this is only tested on Debian 10 and 11
+* For now this is only tested on Debian Linux
 * You will need your own AWS account
 * Make sure you have [added a key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/create-key-pairs.html)
 
