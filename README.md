@@ -37,6 +37,29 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 
 Now you will need to be patient, especially if you selected the $12 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $24 instance plan or higher, but is no longer free tier.
 
+### Troubleshooting
+If the launch script does not work correctly, you should be able to go to your [Lightsail instances page](https://lightsail.aws.amazon.com/ls/webapp/home/instances) and click the little Terminal icon against the server you want to use. This will open an SSH terminal as the admin user. Run these commands to execute the same launcher script as root on the server:
+
+```sh
+# Switch to the root user
+sudo su
+# Download the launcher script
+wget -O /root/launcher.sh https://github.com/codeenigma/ce-lightsail-launcher/blob/main/launcher.sh
+# Make the launcher script executable
+chmod +x /root/launcher.sh
+# Execute the launcher script
+/root/launcher.sh
+```
+
+This typically takes around 10 minutes to run.
+
+#### `gawkpath_default` error
+Due to an issue with the way Debian is provided in Lightsail (as far as we can tell) sometimes the `/etc/profile.d/gawk.csh` script causes `ce-deploy` to fail to run. If you see the `alias: gawkpath_default not found` error then you can move that file out of the way and try again with this command:
+
+```sh
+mv /etc/profile.d/gawk.csh /root/
+```
+
 ### Launching LocalGov Drupal
 Once you have waited a while you can go to your Lightsail Instances page and click on your instance. Under 'Metrics' you should be able to see if your instance is running hot or not. If the metrics show CPU has settled down to a low number, you can be sure the installer is done. To launch LocalGov Drupal:
 
@@ -72,7 +95,7 @@ cd /home/ce-dev/deploy/live.local/web/sites/default/
 This is an initial release which fires up LGD on a single instance. Lightsail and the tools being used allow for more flexibility, so we would like to add some of the following features in the coming months:
 
 * Optionally make proper of Lightsail databases
-* Ensure Debian 11 and Ubuntu support
+* Ensure Ubuntu support
 * Allow for different Drupal distributions
 * Trigger the launcher from the Lightsail API
 * Provide a web UI for launching different distributions
