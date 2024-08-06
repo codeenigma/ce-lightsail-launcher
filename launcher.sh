@@ -7,6 +7,7 @@ apt-get install -y -o Dpkg::Options::="--force-confnew" \
   anacron \
   apt-transport-https \
   apt-utils \
+  debconf-utils \
   aptitude \
   bash \
   binutils \
@@ -53,7 +54,7 @@ chmod 0440 /etc/sudoers.d/ce-dev && \
 # Install Ansible in a Python virtual environment.
 su - ce-dev -c "/usr/bin/python3 -m venv /home/ce-dev/ce-python"
 su - ce-dev -c "/home/ce-dev/ce-python/bin/python3 -m pip install --upgrade pip"
-su - ce-dev -c "/home/ce-dev/ce-python/bin/pip install ansible netaddr python-debian"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/pip install ansible netaddr python-debian PyMySQL"
 su - ce-dev -c "/home/ce-dev/ce-python/bin/ansible-galaxy collection install ansible.posix --force"
 
 su - ce-dev -c "git clone --branch 2.x https://github.com/codeenigma/ce-provision.git /home/ce-dev/ce-provision"
@@ -83,4 +84,4 @@ su - ce-dev -c "mkdir -p /home/ce-dev/deploy/live.local"
 wget -O /home/ce-dev/deploy/live.local/deploy.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/$PROJECT_TYPE/deploy.yml
 set -x && \
 cd /home/ce-dev/deploy/live.local && \
-su - ce-dev -c "/bin/sh /home/ce-dev/ce-deploy/scripts/build.sh --workspace /home/ce-dev/deploy/live.local --playbook deploy.yml --build-number 0 --build-id celocalgovtemplate-dev --ansible-extra-vars \"{_domain_name: $DOMAIN_NAME}\""
+su - ce-dev -c "/bin/sh /home/ce-dev/ce-deploy/scripts/deploy.sh --workspace /home/ce-dev/deploy/live.local --playbook deploy.yml --build-number 0 --build-id celocalgovtemplate-dev --ansible-extra-vars \"{_domain_name: $DOMAIN_NAME}\""

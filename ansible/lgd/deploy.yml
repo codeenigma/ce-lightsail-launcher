@@ -62,13 +62,17 @@
         url: https://raw.githubusercontent.com/drupal/recommended-project/10.3.1/composer.json
         dest: "{{ deploy_path }}/composer.json"
         force: false
+    - name: Set composer minimum-stability to dev for alpha LocalGov Drupal packages.
+      ansible.builtin.command:
+        cmd: composer config minimum-stability dev
+        chdir: "{{ deploy_path }}"
     - name: Enable composer-patches plugin.
       ansible.builtin.command:
         cmd: composer config --no-plugins allow-plugins.cweagans/composer-patches true
         chdir: "{{ deploy_path }}"
     - name: Install drush.
       ansible.builtin.command:
-        cmd: composer require drush/drush:11.*
+        cmd: composer require drush/drush:12.*
         chdir: "{{ deploy_path }}"
     - name: Install LocalGov Drupal.
       ansible.builtin.command:
@@ -92,8 +96,7 @@
   post_tasks:
     - name: Install Localgov Drupal demo content field dependencies.
       ansible.builtin.command:
-        cmd: "{{ drush_bin }} -y en default_content condition_field tablefield geofield_map geocoder_field field_formatter_class dynamic_entity_reference datetime_range date_recur_modular
-search_api_db search_api_autocomplete entity_reference_facet_link"
+        cmd: "{{ drush_bin }} -y en default_content condition_field tablefield geocoder_field field_formatter_class dynamic_entity_reference datetime_range date_recur_modular search_api_db search_api_autocomplete entity_reference_facet_link"
         chdir: "{{ deploy_path }}/{{ webroot }}/sites/{{ drupal.sites[0].folder }}"
       ignore_errors: true
     - name: Install Localgov Drupal demo content other dependencies.
