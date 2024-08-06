@@ -151,6 +151,7 @@
             domains:
               - "{{ _domain_name }}"
             handling: selfsigned
+            replace_existing: false
           servers:
             - port: 80
               ssl: false
