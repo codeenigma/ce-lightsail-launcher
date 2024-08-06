@@ -26,16 +26,16 @@ This project uses these existing tools within a [cloud-init](https://cloudinit.r
 3. Click 'Create Instance'
 4. Select 'Linux/Unix'
 5. Select 'OS Only'
-6. Select 'Debian 10.8' or 'Debian 11.4' (either should work)
+6. Select one of the 'Debian' images (any should work)
 7. Click 'Add Launch Script'
 8. Open [`launcher.sh`](https://github.com/codeenigma/ce-lightsail-launcher/blob/main/launcher.sh) in a new window
 9. Copy it to your clipboard using the 'copy raw contents' button in the top right
 10. Close it so you go back to Lightsail and paste into the 'Add Launch Script' text box
-11. Make sure the correct SSH key is selected
-12. Choose an instance plan (you can use the $10 free for 3 months plan but the installation will be a little slow)
+11. Make sure the correct SSH key is selected (you can create one inline if needed, but make sure you download the private part)
+12. Choose an instance plan (you can use the $12 free for 3 months plan but the installation will be a little slow)
 13. Click the 'Create instance' button
 
-Now you will need to be patient, especially if you selected the $10 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $20 instance plan or higher, but is no longer free tier.
+Now you will need to be patient, especially if you selected the $12 plan, because the demo content generation takes about an hour to complete on smaller plans. Once the demo content generation is completed you will find LocalGov Drupal runs just fine. Set up is obviously quicker with a $24 instance plan or higher, but is no longer free tier.
 
 ### Launching LocalGov Drupal
 Once you have waited a while you can go to your Lightsail Instances page and click on your instance. Under 'Metrics' you should be able to see if your instance is running hot or not. If the metrics show CPU has settled down to a low number, you can be sure the installer is done. To launch LocalGov Drupal:
@@ -45,6 +45,8 @@ Once you have waited a while you can go to your Lightsail Instances page and cli
 3. Go to the HTTP address with that IP, e.g. if the 'Public IP' is 3.2.3.2 then visit http://3.2.3.2 in your browser
 
 You should be presented with LocalGov Drupal.
+
+For HTTPS you will need to go to your server in Lightsail and select the 'Networking' tab. Under 'IPv4 Firewall' you will need to click 'Add rule' and under 'Application' pick 'HTTPS' then click 'Create'.
 
 ### Logging in
 You will not initially know your LGD root password. To set it to a value you know connect to your instance by clicking the 'Connect using SSH' button. This will open in a new window. Run these commands:
