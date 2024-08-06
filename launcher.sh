@@ -70,7 +70,7 @@ su - ce-dev -c "/usr/local/bin/ansible-playbook --extra-vars=\"{ansible_common_r
 wget -O /home/ce-dev/ce-provision/provision.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/_common/provision.yml
 set -x && \
 cd /home/ce-dev/ce-provision && \
-su - ce-dev -c "/usr/local/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/provision.yml"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/provision.yml"
 
 # Configure MariaDB
 set -x && \
