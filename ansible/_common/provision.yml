@@ -2,146 +2,151 @@
 - hosts: localhost
   become: true
   vars:
-    - _env_type: dev
-    - db_root_pass: ce-dev
-    - project_name: lgd
-    - user_root:
-        authorized_keys: []
-        delete_admin: false
-    - mysql_client:
-        client: "mariadb-client"
-        host: localhost
-        user: root
-        password: ce-dev
-        creds_file_dest: /home/ce-dev/.mysql.creds
-        creds_file_owner: ce-dev
-        creds_file_group: ce-dev
-    - nginx:
-        user: www-data
-        worker_processes: auto
-        events:
-          worker_connections: 768
-        http:
-          server_names_hash_bucket_size: 256
-          access_log: /var/log/nginx-access.log
-          error_log: /var/log/nginx-error.log
-          ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
-        log_group_prefix: ""
-        php_fastcgi_backend: "127.0.0.1:90{{ php.version[-1] | replace('.','') }}"
-        ratelimitingcrawlers: false
-        client_max_body_size: "700M"
-        fastcgi_read_timeout: 60
-        overrides: []
-        recreate_vhosts: true
-        domains:
-          - server_name: "_"
-            access_log:  "/var/log/nginx-access.log"
-            error_log:  "/var/log/nginx-error.log"
-            error_log_level:  "notice"
-            webroot:  "/home/ce-dev/deploy/live.local/web"
-            project_type:  "drupal8"
-            ratelimitingcrawlers: false
-            is_default: true
-            ssl: # @see the 'ssl' role.
-              domains:
-                - "{{ _domain_name }}"
-              handling: selfsigned
-            servers:
-              - port: 80
-                ssl: false
-                https_redirect: false
-              - port: 443
-                ssl: true
-                https_redirect: false
-            upstreams: []
-    - php:
-        version:
-          - 8.1
-        apt_signed_by: https://packages.sury.org/php/apt.gpg
-        apt_origin: "origin=deb.sury.org,codename=${distro_codename}"
-        cli:
-          expose_php: "On"
-          error_reporting: "E_ALL"
-          display_errors: "On"
-          display_startup_errors: "On"
-          html_errors: "On"
-          engine: "On"
-          short_open_tag: "Off"
-          max_execution_time: 120
-          max_input_time: 60
-          max_input_nesting_level: 64
-          max_input_vars: 1000
-          memory_limit: -1
-          log_errors_max_len: 1024
-          ignore_repeated_errors: "Off"
-          ignore_repeated_source: "Off"
-          post_max_size: 200M
-          upload_max_filesize: 200M
-          max_file_uploads: 20
-          date_timezone: "Europe/London"
-          gc_maxlifetime: 1440
-          zend_assertions: -1
-          overrides: {}
-          opcache:
-            enable: 1
-            enable_cli: 0
-            memory_consumption: 128
-            max_accelerated_files: 2000
-            validate_timestamps: 1
-        fpm:
-          expose_php: "On"
-          error_reporting: "E_ALL"
-          display_errors: "On"
-          display_startup_errors: "On"
-          html_errors: "On"
-          engine: "On"
-          short_open_tag: "Off"
-          max_execution_time: 120
-          max_input_time: 60
-          max_input_nesting_level: 64
-          max_input_vars: 1000
-          memory_limit: 256M
-          log_errors_max_len: 1024
-          ignore_repeated_errors: "Off"
-          ignore_repeated_source: "Off"
-          post_max_size: 200M
-          upload_max_filesize: 200M
-          max_file_uploads: 20
-          date_timezone: "Europe/London"
-          gc_maxlifetime: 1440
-          cookie_lifetime: 0
-          zend_assertions: -1
-          session_cookie_secure: "Off"
-          unix_socket: false
-          server_ip: "127.0.0.1"
-          tcp_port: ""
-          pool_user: ce-dev
-          pool_group: ce-dev
-          pm: dynamic
-          clear_env: "yes"
-          default_socket_timeout: 60
-          max_children: 5
-          start_servers: 2
-          min_spare_servers: 1
-          max_spare_servers: 3
-          process_idle_timeout: 10s
-          max_requests: 500
-          request_terminate_timeout: 0
-          rlimit_core: 0
-          slow_log: true
-          request_slowlog_timeout: 0
-          slowlog_file_directory: /home/ce-dev
-          opcache:
-            enable: 1
-            enable_cli: 0
-            memory_consumption: 128
-            max_accelerated_files: 2000
-            validate_timestamps: 1
-    - php_composer:
-        version: ''
-        version_branch: '--2'
-        keep_updated: true
-        github_oauth_token: ''
+    _ce_provision_username: ce-dev
+    _venv_path: /home/ce-dev/ce-python
+    _venv_command: /usr/bin/python3 -m venv
+    _venv_install_username: "{{ _ce_provision_username }}"
+    _ce_ansible_timer_name: upgrade_ansible
+    _env_type: dev
+    db_root_pass: ce-dev
+    project_name: lgd
+    user_root:
+      authorized_keys: []
+      delete_admin: false
+    mysql_client:
+      client: "mariadb-client"
+      host: localhost
+      user: root
+      password: ce-dev
+      creds_file_dest: /home/ce-dev/.mysql.creds
+      creds_file_owner: ce-dev
+      creds_file_group: ce-dev
+    nginx:
+      user: www-data
+      worker_processes: auto
+      events:
+        worker_connections: 768
+      http:
+        server_names_hash_bucket_size: 256
+        access_log: /var/log/nginx-access.log
+        error_log: /var/log/nginx-error.log
+        ssl_protocols: "TLSv1 TLSv1.1 TLSv1.2"
+      log_group_prefix: ""
+      php_fastcgi_backend: "127.0.0.1:90{{ php.version[-1] | replace('.','') }}"
+      ratelimitingcrawlers: false
+      client_max_body_size: "700M"
+      fastcgi_read_timeout: 60
+      overrides: []
+      recreate_vhosts: true
+      domains:
+        - server_name: "_"
+          access_log:  "/var/log/nginx-access.log"
+          error_log:  "/var/log/nginx-error.log"
+          error_log_level:  "notice"
+          webroot:  "/home/ce-dev/deploy/live.local/web"
+          project_type:  "drupal8"
+          ratelimitingcrawlers: false
+          is_default: true
+          ssl: # @see the 'ssl' role.
+            domains:
+              - "{{ _domain_name }}"
+            handling: selfsigned
+          servers:
+            - port: 80
+              ssl: false
+              https_redirect: false
+            - port: 443
+              ssl: true
+              https_redirect: false
+          upstreams: []
+    php:
+      version:
+        - 8.1
+      apt_signed_by: https://packages.sury.org/php/apt.gpg
+      apt_origin: "origin=deb.sury.org,codename=${distro_codename}"
+      cli:
+        expose_php: "On"
+        error_reporting: "E_ALL"
+        display_errors: "On"
+        display_startup_errors: "On"
+        html_errors: "On"
+        engine: "On"
+        short_open_tag: "Off"
+        max_execution_time: 120
+        max_input_time: 60
+        max_input_nesting_level: 64
+        max_input_vars: 1000
+        memory_limit: -1
+        log_errors_max_len: 1024
+        ignore_repeated_errors: "Off"
+        ignore_repeated_source: "Off"
+        post_max_size: 200M
+        upload_max_filesize: 200M
+        max_file_uploads: 20
+        date_timezone: "Europe/London"
+        gc_maxlifetime: 1440
+        zend_assertions: -1
+        overrides: {}
+        opcache:
+          enable: 1
+          enable_cli: 0
+          memory_consumption: 128
+          max_accelerated_files: 2000
+          validate_timestamps: 1
+      fpm:
+        expose_php: "On"
+        error_reporting: "E_ALL"
+        display_errors: "On"
+        display_startup_errors: "On"
+        html_errors: "On"
+        engine: "On"
+        short_open_tag: "Off"
+        max_execution_time: 120
+        max_input_time: 60
+        max_input_nesting_level: 64
+        max_input_vars: 1000
+        memory_limit: 256M
+        log_errors_max_len: 1024
+        ignore_repeated_errors: "Off"
+        ignore_repeated_source: "Off"
+        post_max_size: 200M
+        upload_max_filesize: 200M
+        max_file_uploads: 20
+        date_timezone: "Europe/London"
+        gc_maxlifetime: 1440
+        cookie_lifetime: 0
+        zend_assertions: -1
+        session_cookie_secure: "Off"
+        unix_socket: false
+        server_ip: "127.0.0.1"
+        tcp_port: ""
+        pool_user: ce-dev
+        pool_group: ce-dev
+        pm: dynamic
+        clear_env: "yes"
+        default_socket_timeout: 60
+        max_children: 5
+        start_servers: 2
+        min_spare_servers: 1
+        max_spare_servers: 3
+        process_idle_timeout: 10s
+        max_requests: 500
+        request_terminate_timeout: 0
+        rlimit_core: 0
+        slow_log: true
+        request_slowlog_timeout: 0
+        slowlog_file_directory: /home/ce-dev
+        opcache:
+          enable: 1
+          enable_cli: 0
+          memory_consumption: 128
+          max_accelerated_files: 2000
+          validate_timestamps: 1
+    php_composer:
+      version: ''
+      version_branch: '--2'
+      keep_updated: true
+      github_oauth_token: ''
   tasks:
     - name: Update the apt cache.
       ansible.builtin.apt:
