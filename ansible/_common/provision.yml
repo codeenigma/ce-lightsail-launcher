@@ -118,6 +118,7 @@
           pool_user: ce-dev
           pool_group: ce-dev
           pm: dynamic
+          clear_env: "yes"
           default_socket_timeout: 60
           max_children: 5
           start_servers: 2
