@@ -49,10 +49,11 @@ echo root:ce-dev | chpasswd -m && \
 echo 'ce-dev ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/ce-dev && \
 chmod 0440 /etc/sudoers.d/ce-dev && \
 
-# Install Ansible
-pip3 install ansible boto3 && \
-git lfs install --skip-repo && \
-update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+# Install Ansible in a Python virtual environment.
+su - ce-dev -c "/usr/bin/python3 -m venv /home/ce-dev/ce-python"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/python3 -m pip install --upgrade pip"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/pip install ansible netaddr python-debian"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/ansible-galaxy collection install ansible.posix --force"
 
 su - ce-dev -c "git clone --branch 2.x https://github.com/codeenigma/ce-provision.git /home/ce-dev/ce-provision"
 
@@ -64,7 +65,7 @@ PROJECT_TYPE="lgd"
 wget -O /home/ce-dev/ce-provision/setup.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/_common/setup.yml
 set -x && \
 cd /home/ce-dev/ce-provision && \
-su - ce-dev -c "/usr/local/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/setup.yml"
+su - ce-dev -c "/home/ce-dev/ce-python/bin/ansible-playbook --extra-vars=\"{ansible_common_remote_group: ce-dev, _domain_name: $DOMAIN_NAME}\" /home/ce-dev/ce-provision/setup.yml"
 
 # Install web server packages
 wget -O /home/ce-dev/ce-provision/provision.yml https://raw.githubusercontent.com/codeenigma/ce-lightsail-launcher/main/ansible/_common/provision.yml
