@@ -138,6 +138,7 @@
       fastcgi_read_timeout: 60
       overrides: []
       recreate_vhosts: true
+      keep_default_vhost: true
       domains:
         - server_name: "_"
           access_log:  /var/log/nginx-access.log
