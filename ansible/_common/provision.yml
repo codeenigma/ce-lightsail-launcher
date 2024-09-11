@@ -138,6 +138,7 @@
       fastcgi_read_timeout: 60
       overrides: []
       recreate_vhosts: true
+      vhost_backup_location: "/home/{{ _ce_provision_username }}"
       keep_default_vhost: true
       domains:
         - server_name: "_"
